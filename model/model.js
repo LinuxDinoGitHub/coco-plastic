@@ -22,7 +22,7 @@ fs.createReadStream("data.csv")
         });
         fs.writeFile(
             "formatted.json",
-            JSON.stringify(sorted),
+            JSON.stringify(sorted, null, 2),
             "utf8",
             (err) => {
                 if (err) {
