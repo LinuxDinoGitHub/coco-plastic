@@ -15,7 +15,7 @@ function findLeastLossPair(sorted2DArray, target) {
     const [x, y] = target;
     let minLoss = Infinity; // Initialize minimum loss with infinity
     let bestPair = null;
-    for (const pair of sorted2DArray) {
+    for (const [pair,_] of Object.entries(sorted2DArray)) {
         const [a, b] = pair;
         const loss = Math.abs(a - x) + Math.abs(b - y);
         if (loss < minLoss) {
@@ -35,10 +35,15 @@ function nextCoordinate(coords, time){
     return findLeastLossPair(realdata,[newlong,newlat]);
 }
 
+function tomorrow(time){
+    const date = new Date(time);
+    return date.getDate() + 1;
+}
 
 export default function Home() {
     const [coordinate, setCoordinate] = useState([null, null]);
     const [answerCoords, setAnswerCoords] = useState([null, null]);
+    const [time, setTime] = useState("2024-11-01");
 
     useEffect(() => {
         if (typeof coordinate[0] === "number") {
@@ -68,8 +73,9 @@ export default function Home() {
                             if (isWater && isHK) {
                                 alert("that is on water and in hk");
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
-                                setAnswerCoords(nextCoordinate(coordinate));
-                                console.log(answerCoords)
+                                setAnswerCoords(nextCoordinate(answerCoords,time));
+                                setTime(tomorrow(time));
+                                console.log(answerCoords);
                     } else {
                                 alert("Not on water or not in HK!!!");
                     }
