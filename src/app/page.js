@@ -6,6 +6,7 @@ import {
     Marker,
     Popup,
     TileLayer,
+    useMap,
     useMapEvents,
     ZoomControl,
 } from "react-leaflet";
@@ -13,7 +14,16 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L from "leaflet";
 
-const icon = L.icon({ iconUrl: "/images/marker-icon.png" });
+const iconStart = L.icon({
+    iconUrl: "/marker-icon.webp",
+    iconAnchor: [20, 30],
+    iconSize: new L.Point(30, 30),
+});
+const iconEnd = L.icon({
+    iconUrl: "/final.webp",
+    iconAnchor: [20, 30],
+    iconSize: new L.Point(30, 30),
+});
 
 function DetectClick({ setCoordinate }) {
     useMapEvents({
@@ -23,13 +33,20 @@ function DetectClick({ setCoordinate }) {
     });
 }
 
+const RecenterAutomatically = ({ lat, lng }) => {
+    const map = useMap();
+    useEffect(() => {
+        map.setView([lat, lng]);
+    }, [lat, lng]);
+    return null;
+};
+
 export default function Home() {
     const [coordinate, setCoordinate] = useState([null, null]);
+    const [answerCoords, setAnswerCoords] = useState([null, null]);
 
     useEffect(() => {
-        console.log(coordinate);
         if (typeof coordinate[0] === "number") {
-            console.log("before");
             axios
                 .get(
                     `https://isitwater-com.p.rapidapi.com/?latitude=${coordinate[0]}&longitude=${coordinate[1]}`,
@@ -42,11 +59,11 @@ export default function Home() {
                     }
                 )
                 .then((res) => {
-                    console.log("done");
                     const isWater = res.data.water;
-
                     if (isWater) {
                         alert("that is on water");
+                        // determine the coords, and do setAnswerCoords([latitude, longitude])
+                        setAnswerCoords([0, 0]);
                     } else {
                         alert("Not on water!!!");
                     }
@@ -67,8 +84,8 @@ export default function Home() {
             </div>
 
             <MapContainer
-                center={[0, 0]}
-                zoom={1}
+                center={[22.370056, 114.1535941]}
+                zoom={10.5}
                 className="w-screen h-screen fade-in"
                 zoomControl={false}
             >
@@ -79,12 +96,27 @@ export default function Home() {
                 <ZoomControl position="bottomright" />
                 <DetectClick setCoordinate={setCoordinate} />
                 {typeof coordinate[0] === "number" && (
-                    <Marker position={coordinate} icon={icon}>
-                        <Popup>
-                            A pretty CSS3 popup. <br /> Easily customizable.
-                        </Popup>
+                    <Marker position={coordinate} icon={iconStart}>
+                        <Popup>Plastic starts here</Popup>
                     </Marker>
                 )}
+                {typeof answerCoords[0] === "number" && (
+                    <Marker position={answerCoords} icon={iconEnd}>
+                        <Popup>Plastic ends here</Popup>
+                    </Marker>
+                )}
+                <RecenterAutomatically
+                    lat={
+                        typeof answerCoords[0] === "number"
+                            ? answerCoords[0]
+                            : 22.370056
+                    }
+                    lng={
+                        typeof answerCoords[1] === "number"
+                            ? answerCoords[1]
+                            : 114.1535941
+                    }
+                />
             </MapContainer>
         </div>
     );
