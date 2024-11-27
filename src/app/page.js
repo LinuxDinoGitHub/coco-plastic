@@ -68,7 +68,8 @@ export default function Home() {
                             if (isWater && isHK) {
                                 alert("that is on water and in hk");
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
-                                setAnswerCoords([0, 0]);
+                                setAnswerCoords(nextCoordinate(coordinate));
+                                console.log(answerCoords)
                     } else {
                                 alert("Not on water or not in HK!!!");
                     }
