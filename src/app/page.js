@@ -61,7 +61,7 @@ export default function Home() {
                     {
                         headers: {
                             "x-rapidapi-key":
-                                "1ca6713b92mshe945944449df0d5p115855jsn8f911baafb57",
+                                "eddf273b63msh1f197c8d607949cp11a86fjsn682de1c33dc2",
                             "x-rapidapi-host": "isitwater-com.p.rapidapi.com",
                         },
                     }
@@ -82,10 +82,10 @@ export default function Home() {
                                 alert("that is on water and in hk");
                                 console.log(realdata);
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
-                                // setAnswerCoords(
-                                //     nextCoordinate(answerCoords, time)
-                                // );
-                                // setTime(tomorrow(time));
+                                setAnswerCoords(
+                                    nextCoordinate(answerCoords, time)
+                                );
+                                setTime(tomorrow(time));
                                 console.log(answerCoords);
                             } else {
                                 alert("Not on water or not in HK!!!");
