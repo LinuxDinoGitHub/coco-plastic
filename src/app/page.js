@@ -41,6 +41,33 @@ const RecenterAutomatically = ({ lat, lng }) => {
     return null;
 };
 
+const realdata = require("/model/formatted.json");
+
+function findLeastLossPair(sorted2DArray, target) {
+    const [x, y] = target;
+    let minLoss = Infinity; // Initialize minimum loss with infinity
+    let bestPair = null;
+    for (const pair of sorted2DArray) {
+        const [a, b] = pair;
+        const loss = Math.abs(a - x) + Math.abs(b - y);
+        if (loss < minLoss) {
+            minLoss = loss;
+            bestPair = pair;
+        }
+    };
+    return bestPair;
+}
+
+
+let knMultiplier = 1;
+function nextCoordinate(coords, time){
+    let info = realdata[coords][time]
+    newlong = parseInt(info[0]) * knMultiplier * Math.cos(Math.abs(180-parseInt(info[1]))) + coords[0];
+    newlat = parseInt(info[0]) * knMultiplier * Math.sin(Math.abs(180-parseInt(info[1]))) + coords[1];
+    return findLeastLossPair(realdata,[newlong,newlat]);
+}
+
+
 export default function Home() {
     const [coordinate, setCoordinate] = useState([null, null]);
     const [answerCoords, setAnswerCoords] = useState([null, null]);
@@ -69,14 +96,14 @@ export default function Home() {
                                 res2.data.results[0].components[
                                     "ISO_3166-2"
                                 ][0] === "CN-HK";
-                            const isWater = res.data.water;
+                    const isWater = res.data.water;
                             if (isWater && isHK) {
                                 alert("that is on water and in hk");
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
                                 setAnswerCoords([0, 0]);
-                            } else {
+                    } else {
                                 alert("Not on water or not in HK!!!");
-                            }
+                    }
                         });
                 });
         }

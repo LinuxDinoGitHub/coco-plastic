@@ -8,7 +8,7 @@ fs.createReadStream("data.csv")
     .on("data", (data) => results.push(data))
     .on("end", () => {
         results.forEach((curr) => {
-            const latlng = curr.LATITUDE + curr.LONGITUDE;
+            const latlng = [curr.LATITUDE, curr.LONGITUDE];
             if (sorted[latlng]) {
                 sorted[latlng][curr.DATE] = [
                     curr["0000-KNOT"],
