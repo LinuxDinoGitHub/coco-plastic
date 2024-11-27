@@ -3,6 +3,7 @@
 import axios from "axios";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
+import { split } from "postcss/lib/list";
 import { useEffect, useState } from "react";
 
 const MapWithNoSSR = dynamic(() => import("./map"), {
@@ -11,39 +12,33 @@ const MapWithNoSSR = dynamic(() => import("./map"), {
 
 const realdata = require("/model/formatted.json");
 
-function findLeastLossPair(sorted2DArray, target) {
+function findLeastLossPair(data, target) {
     const [x, y] = target;
     let minLoss = Infinity; // Initialize minimum loss with infinity
     let bestPair = null;
-    for (const [pair, _] of Object.entries(sorted2DArray)) {
-        const [a, b] = pair;
-        const loss = Math.abs(a - x) + Math.abs(b - y);
+    for (const [pair,_] of Object.entries(data)) {
+        const [a, b] = pair.split(",");
+        const loss = Math.abs(parseInt(a) - x) + Math.abs(parseInt(b) - y);
         if (loss < minLoss) {
             minLoss = loss;
-            bestPair = pair;
+            bestPair = [a,b];
         }
-    }
+    };
     return bestPair;
 }
 
-let knMultiplier = 1;
-function nextCoordinate(coords, time) {
-    let info = realdata[coords][time];
-    console.log(info);
-    newlong =
-        parseInt(info[0]) *
-            knMultiplier *
-            Math.cos(Math.abs(180 - parseInt(info[1]))) +
-        coords[0];
-    newlat =
-        parseInt(info[0]) *
-            knMultiplier *
-            Math.sin(Math.abs(180 - parseInt(info[1]))) +
-        coords[1];
-    return findLeastLossPair(realdata, [newlong, newlat]);
+let knMultiplier = 1/60;
+function nextCoordinate(coords, time){
+    console.log(coords)
+    let newcoords = findLeastLossPair(realdata,[parseInt(coords[0]),parseInt(coords[1])]);
+    console.log(newcoords)
+    let info = realdata[newcoords.join(",")][time]
+    let newlong = parseInt(info[0]) * knMultiplier * Math.cos(Math.abs(180-parseInt(info[1]))) + newcoords[0];
+    let newlat = parseInt(info[0]) * knMultiplier * Math.sin(Math.abs(180-parseInt(info[1]))) + newcoords[1];
+    return findLeastLossPair(realdata,[newlong,newlat]);
 }
 
-function tomorrow(time) {
+function tomorrow(time){
     const date = new Date(time);
     return date.getDate() + 1;
 }
@@ -54,14 +49,14 @@ export default function Home() {
     const [time, setTime] = useState("2024-11-01");
 
     useEffect(() => {
-        if (typeof coordinate[0] === "number") {
-            axios
+        if (coordinate[0] !== null) {
+            /* axios
                 .get(
                     `https://isitwater-com.p.rapidapi.com/?latitude=${coordinate[0]}&longitude=${coordinate[1]}`,
                     {
                         headers: {
                             "x-rapidapi-key":
-                                "eddf273b63msh1f197c8d607949cp11a86fjsn682de1c33dc2",
+                                "1ca6713b92mshe945944449df0d5p115855jsn8f911baafb57",
                             "x-rapidapi-host": "isitwater-com.p.rapidapi.com",
                         },
                     }
@@ -77,21 +72,19 @@ export default function Home() {
                                 res2.data.results[0].components[
                                     "ISO_3166-2"
                                 ][0] === "CN-HK";
-                            const isWater = res.data.water;
-                            if (isWater && isHK) {
-                                alert("that is on water and in hk");
-                                console.log(realdata);
+                    const isWater = res.data.water;
+                    if (isWater && isHK) {
+                        alert("that is on water and in hk");
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
-                                setAnswerCoords(
-                                    nextCoordinate(answerCoords, time)
-                                );
-                                setTime(tomorrow(time));
-                                console.log(answerCoords);
-                            } else {
+                    } else {
                                 alert("Not on water or not in HK!!!");
-                            }
+                    }
+                    
                         });
-                });
+                }); */
+            setAnswerCoords(nextCoordinate(answerCoords,time));
+            setTime(tomorrow(time));
+            console.log(answerCoords);
         }
     }, [coordinate]);
     return (
