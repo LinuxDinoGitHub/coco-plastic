@@ -36,7 +36,7 @@ function DetectClick({ setCoordinate }) {
 const RecenterAutomatically = ({ lat, lng }) => {
     const map = useMap();
     useEffect(() => {
-        map.setView([lat, lng]);
+        map.flyTo([lat, lng]);
     }, [lat, lng]);
     return null;
 };
@@ -59,14 +59,25 @@ export default function Home() {
                     }
                 )
                 .then((res) => {
-                    const isWater = res.data.water;
-                    if (isWater) {
-                        alert("that is on water");
-                        // determine the coords, and do setAnswerCoords([latitude, longitude])
-                        setAnswerCoords([0, 0]);
-                    } else {
-                        alert("Not on water!!!");
-                    }
+                    axios
+                        .get(
+                            `https://api.opencagedata.com/geocode/v1/json?q=${coordinate[0]}%2C${coordinate[1]}&key=f7263551ec984098b10cd12af7b5eef5`
+                        )
+                        .then((res2) => {
+                            console.log(res2);
+                            const isHK =
+                                res2.data.results[0].components[
+                                    "ISO_3166-2"
+                                ][0] === "CN-HK";
+                            const isWater = res.data.water;
+                            if (isWater && isHK) {
+                                alert("that is on water and in hk");
+                                // determine the coords, and do setAnswerCoords([latitude, longitude])
+                                setAnswerCoords([0, 0]);
+                            } else {
+                                alert("Not on water or not in HK!!!");
+                            }
+                        });
                 });
         }
     }, [coordinate]);
