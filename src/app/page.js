@@ -31,32 +31,31 @@ let knMultiplier = 2; // 1/60
 function nextCoordinate(coords, time) {
     console.log(coords);
     let newcoords = findLeastLossPair(realdata, [
-        parseInt(coords[0]),
-        parseInt(coords[1]),
+        parseFloat(coords[0]),
+        parseFloat(coords[1]),
     ]);
     console.log(newcoords);
     let info = realdata[newcoords.join(",")][time];
-    console.log(time, info);
+    console.log(time, info, parseFloat());
     let newlong =
-        parseInt(info[0]) *
+        parseFloat(info[0]) *
             knMultiplier *
-            Math.cos(Math.abs(180 - parseInt(info[1]))) +
+            Math.cos(Math.abs(180 - parseFloat(info[1]))) +
         newcoords[0];
     let newlat =
-        parseInt(info[0]) *
+        parseFloat(info[0]) *
             knMultiplier *
-            Math.sin(Math.abs(180 - parseInt(info[1]))) +
+            Math.sin(Math.abs(180 - parseFloat(info[1]))) +
         newcoords[1];
-    return findLeastLossPair(realdata, [
-        newlong.substring(1),
-        newlat.substring(1),
-    ]);
+    console.log(newlat, newlong);
+    // supposed to have findLeastLossPair(realdata,
+    return [newlong.substring(1), newlat.substring(1)];
 }
 
 function tomorrow(time) {
     let date = new Date(time);
     date.setDate(date.getDate() + 1);
-    return date;
+    return date.toISOString().split("T")[0];
 }
 
 export default function Home() {
@@ -92,12 +91,14 @@ export default function Home() {
                             if (isWater && isHK) {
                                 alert("that is on water and in hk");
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
-                                setAnswerCoords(
-                                    nextCoordinate(coordinate, time).map(
-                                        (curr) => parseFloat(curr)
-                                    )
-                                );
-                                // setTime(tomorrow(time));
+                                for (let i = 0; i < 28; i++) {
+                                    setAnswerCoords(
+                                        nextCoordinate(coordinate, time).map(
+                                            (curr) => parseFloat(curr)
+                                        )
+                                    );
+                                    setTime(tomorrow(time));
+                                }
                             } else {
                                 alert("Not on water or not in HK!!!");
                             }
