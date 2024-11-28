@@ -27,7 +27,7 @@ function findLeastLossPair(data, target) {
     return bestPair;
 }
 
-let knMultiplier = 1 / 60;
+let knMultiplier = 2; // 1/60
 function nextCoordinate(coords, time) {
     console.log(coords);
     let newcoords = findLeastLossPair(realdata, [
@@ -66,7 +66,7 @@ export default function Home() {
 
     useEffect(() => {
         if (coordinate[0] !== null) {
-            /* axios
+            axios
                 .get(
                     `https://isitwater-com.p.rapidapi.com/?latitude=${coordinate[0]}&longitude=${coordinate[1]}`,
                     {
@@ -88,20 +88,21 @@ export default function Home() {
                                 res2.data.results[0].components[
                                     "ISO_3166-2"
                                 ][0] === "CN-HK";
-                    const isWater = res.data.water;
-                    if (isWater && isHK) {
-                        alert("that is on water and in hk");
+                            const isWater = res.data.water;
+                            if (isWater && isHK) {
+                                alert("that is on water and in hk");
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
-                    } else {
+                                setAnswerCoords(
+                                    nextCoordinate(coordinate, time).map(
+                                        (curr) => parseFloat(curr)
+                                    )
+                                );
+                                // setTime(tomorrow(time));
+                            } else {
                                 alert("Not on water or not in HK!!!");
-                    }
-                    
+                            }
                         });
-                }); */
-            setAnswerCoords(
-                nextCoordinate(coordinate, time).map((curr) => parseInt(curr))
-            );
-            setTime(tomorrow(time));
+                });
         }
     }, [coordinate]);
     useEffect(() => {
