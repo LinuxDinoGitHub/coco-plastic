@@ -16,31 +16,47 @@ function findLeastLossPair(data, target) {
     const [x, y] = target;
     let minLoss = Infinity; // Initialize minimum loss with infinity
     let bestPair = null;
-    for (const [pair,_] of Object.entries(data)) {
+    for (const [pair, _] of Object.entries(data)) {
         const [a, b] = pair.split(",");
         const loss = Math.abs(parseInt(a) - x) + Math.abs(parseInt(b) - y);
         if (loss < minLoss) {
             minLoss = loss;
-            bestPair = [a,b];
+            bestPair = [a, b];
         }
-    };
+    }
     return bestPair;
 }
 
-let knMultiplier = 1/60;
-function nextCoordinate(coords, time){
-    console.log(coords)
-    let newcoords = findLeastLossPair(realdata,[parseInt(coords[0]),parseInt(coords[1])]);
-    console.log(newcoords)
-    let info = realdata[newcoords.join(",")][time]
-    let newlong = parseInt(info[0]) * knMultiplier * Math.cos(Math.abs(180-parseInt(info[1]))) + newcoords[0];
-    let newlat = parseInt(info[0]) * knMultiplier * Math.sin(Math.abs(180-parseInt(info[1]))) + newcoords[1];
-    return findLeastLossPair(realdata,[newlong,newlat]);
+let knMultiplier = 1 / 60;
+function nextCoordinate(coords, time) {
+    console.log(coords);
+    let newcoords = findLeastLossPair(realdata, [
+        parseInt(coords[0]),
+        parseInt(coords[1]),
+    ]);
+    console.log(newcoords);
+    let info = realdata[newcoords.join(",")][time];
+    console.log(time, info);
+    let newlong =
+        parseInt(info[0]) *
+            knMultiplier *
+            Math.cos(Math.abs(180 - parseInt(info[1]))) +
+        newcoords[0];
+    let newlat =
+        parseInt(info[0]) *
+            knMultiplier *
+            Math.sin(Math.abs(180 - parseInt(info[1]))) +
+        newcoords[1];
+    return findLeastLossPair(realdata, [
+        newlong.substring(1),
+        newlat.substring(1),
+    ]);
 }
 
-function tomorrow(time){
-    const date = new Date(time);
-    return date.getDate() + 1;
+function tomorrow(time) {
+    let date = new Date(time);
+    date.setDate(date.getDate() + 1);
+    return date;
 }
 
 export default function Home() {
@@ -82,11 +98,15 @@ export default function Home() {
                     
                         });
                 }); */
-            setAnswerCoords(nextCoordinate(answerCoords,time));
+            setAnswerCoords(
+                nextCoordinate(coordinate, time).map((curr) => parseInt(curr))
+            );
             setTime(tomorrow(time));
-            console.log(answerCoords);
         }
     }, [coordinate]);
+    useEffect(() => {
+        console.log(answerCoords);
+    }, [answerCoords]);
     return (
         <div className="w-screen h-screen">
             <div className="text-white title text-[6vw] w-[60vw] absolute z-[100000]">
