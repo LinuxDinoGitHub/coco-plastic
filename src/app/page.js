@@ -18,7 +18,7 @@ function findLeastLossPair(data, target) {
     let bestPair = null;
     for (const [pair, _] of Object.entries(data)) {
         const [a, b] = pair.split(",");
-        const loss = Math.abs(parseInt(a) - x) + Math.abs(parseInt(b) - y);
+        const loss = Math.abs(parseFloat(a) - x) + Math.abs(parseFloat(b) - y);
         if (loss < minLoss) {
             minLoss = loss;
             bestPair = [a, b];
@@ -41,15 +41,15 @@ function nextCoordinate(coords, time) {
         parseFloat(info[0]) *
             knMultiplier *
             Math.cos(Math.abs(180 - parseFloat(info[1]))) +
-        newcoords[0];
+        parseFloat(newcoords[0]);
     let newlat =
         parseFloat(info[0]) *
             knMultiplier *
             Math.sin(Math.abs(180 - parseFloat(info[1]))) +
-        newcoords[1];
+        parseFloat(newcoords[1]);
     console.log(newlat, newlong);
     // supposed to have findLeastLossPair(realdata,
-    return [newlong.substring(1), newlat.substring(1)];
+    return [newlong, newlat];
 }
 
 function tomorrow(time) {
@@ -89,7 +89,6 @@ export default function Home() {
                                 ][0] === "CN-HK";
                             const isWater = res.data.water;
                             if (isWater && isHK) {
-                                alert("that is on water and in hk");
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
                                 for (let i = 0; i < 28; i++) {
                                     setAnswerCoords(
