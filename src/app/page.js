@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
 import { split } from "postcss/lib/list";
 import { useEffect, useState } from "react";
+import { Polyline } from "react-leaflet";
 
 const MapWithNoSSR = dynamic(() => import("./map"), {
     ssr: false,
@@ -17,18 +18,26 @@ function findLeastLossPair(data, target) {
     const [x, y] = target;
     let minLoss = Infinity; // Initialize minimum loss with infinity
     let bestPair = null;
+    let secondBestPair = null; // Second pair to simulate randomness and increase system entropy
     for (const [pair, _] of Object.entries(data)) {
         const [a, b] = pair.split(",");
         const loss = Math.abs(parseFloat(a) - x) + Math.abs(parseFloat(b) - y);
         if (loss < minLoss) {
             minLoss = loss;
+            secondBestPair = bestPair;
             bestPair = [a, b];
         }
     }
-    return bestPair;
+    if(Math.random() < 0.6){
+        return bestPair;
+    }
+    else{
+        return secondBestPair;
+    }
+    
 }
 
-let knMultiplier = 2; // 1/60
+let knMultiplier = 1/60; // 1/60 conversion rate from knots to longitudinal length (1 minute or something like that)
 function nextCoordinate(coords, time) {
     let newcoords = findLeastLossPair(realdata, [
         parseFloat(coords[0]),
@@ -97,6 +106,7 @@ export default function Home() {
                                     );
                                     setTime(tomorrow(time));
                                 }
+                                console.log(finalArr)
                                 setAnswerCoords(finalArr);
                             } else {
                                 alert("Not on water or not in HK!!!");
@@ -127,7 +137,9 @@ export default function Home() {
                             : [null, null]
                     }
                     setCoordinate={setCoordinate}
-                />
+                >
+                    <Polyline pathOptions={{color: 'lime'}} positions={answerCoords} />
+                </MapWithNoSSR>
                 <div className="absolute bottom-[5vh] min-width-[50vw] left-0 right-0 ms-auto me-auto w-fit bg-black fade-in p-[2vw]">
                     <div className="text-[1.5vw] font-bold ">
                         Turn this slider to change the time!
