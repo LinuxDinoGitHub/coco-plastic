@@ -28,16 +28,14 @@ function findLeastLossPair(data, target) {
             bestPair = [a, b];
         }
     }
-    if(Math.random() < 0.6){
+    if (Math.random() < 0.6) {
         return bestPair;
-    }
-    else{
+    } else {
         return secondBestPair;
     }
-    
 }
 
-let knMultiplier = 1/60; // 1/60 conversion rate from knots to longitudinal length (1 minute or something like that)
+let knMultiplier = 1 / 60; // 1/60 conversion rate from knots to longitudinal length (1 minute or something like that)
 function nextCoordinate(coords, time) {
     let newcoords = findLeastLossPair(realdata, [
         parseFloat(coords[0]),
@@ -78,7 +76,7 @@ export default function Home() {
                     {
                         headers: {
                             "x-rapidapi-key":
-                                "1ca6713b92mshe945944449df0d5p115855jsn8f911baafb57",
+                                "1c6c2d6870mshf3fd79aec6a63c9p19b791jsn07300dffaadc",
                             "x-rapidapi-host": "isitwater-com.p.rapidapi.com",
                         },
                     }
@@ -106,7 +104,7 @@ export default function Home() {
                                     );
                                     setTime(tomorrow(time));
                                 }
-                                console.log(finalArr)
+                                console.log(finalArr);
                                 setAnswerCoords(finalArr);
                             } else {
                                 alert("Not on water or not in HK!!!");
@@ -123,9 +121,10 @@ export default function Home() {
                 </div>
                 <div className="w-[40vw] h-[40vh] bg-black p-[1vw] z-[1000] fixed">
                     <div className="text-white top-[8vw] absolute fade-in text-[1.5vw] w-[35vw]">
-                    This is a free tool to see where your plastic goes! 
-                    Click on the map to see where a piece of plastic will end up. 
-                    You can adjust the amount of time with the slider below.
+                        This is a free tool to see where your plastic goes!
+                        Click on the map to see where a piece of plastic will
+                        end up. You can adjust the amount of time with the
+                        slider below.
                     </div>
                 </div>
 
@@ -138,7 +137,10 @@ export default function Home() {
                     }
                     setCoordinate={setCoordinate}
                 >
-                    <Polyline pathOptions={{color: 'lime'}} positions={answerCoords} />
+                    <Polyline
+                        pathOptions={{ color: "lime" }}
+                        positions={answerCoords}
+                    />
                 </MapWithNoSSR>
                 <div className="absolute bottom-[5vh] min-width-[50vw] left-0 right-0 ms-auto me-auto w-fit bg-black fade-in p-[2vw]">
                     <div className="text-[1.5vw] font-bold ">
