@@ -17,8 +17,9 @@
 
 body {
     color: var(--foreground);
-    background: var(--background);
+    background: black;
     font-family: "Montserrat", Helvetica, sans-serif;
+    overflow: hidden;
 }
 
 .title {

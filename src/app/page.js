@@ -1,5 +1,6 @@
 "use client";
 
+import { Slider } from "@mui/material";
 import axios from "axios";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
@@ -29,14 +30,11 @@ function findLeastLossPair(data, target) {
 
 let knMultiplier = 2; // 1/60
 function nextCoordinate(coords, time) {
-    console.log(coords);
     let newcoords = findLeastLossPair(realdata, [
         parseFloat(coords[0]),
         parseFloat(coords[1]),
     ]);
-    console.log(newcoords);
     let info = realdata[newcoords.join(",")][time];
-    console.log(time, info, parseFloat());
     let newlong =
         parseFloat(info[0]) *
             knMultiplier *
@@ -47,7 +45,6 @@ function nextCoordinate(coords, time) {
             knMultiplier *
             Math.sin(Math.abs(180 - parseFloat(info[1]))) +
         parseFloat(newcoords[1]);
-    console.log(newlat, newlong);
     // supposed to have findLeastLossPair(realdata,
     return [newlong, newlat];
 }
@@ -62,6 +59,7 @@ export default function Home() {
     const [coordinate, setCoordinate] = useState([null, null]);
     const [answerCoords, setAnswerCoords] = useState([null, null]);
     const [time, setTime] = useState("2024-11-01");
+    const [howManyDays, setDays] = useState(10);
 
     useEffect(() => {
         if (coordinate[0] !== null) {
@@ -82,7 +80,6 @@ export default function Home() {
                             `https://api.opencagedata.com/geocode/v1/json?q=${coordinate[0]}%2C${coordinate[1]}&key=f7263551ec984098b10cd12af7b5eef5`
                         )
                         .then((res2) => {
-                            console.log(res2);
                             const isHK =
                                 res2.data.results[0].components[
                                     "ISO_3166-2"
@@ -90,7 +87,7 @@ export default function Home() {
                             const isWater = res.data.water;
                             if (isWater && isHK) {
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
-                                for (let i = 0; i < 28; i++) {
+                                for (let i = 0; i < howManyDays; i++) {
                                     setAnswerCoords(
                                         nextCoordinate(coordinate, time).map(
                                             (curr) => parseFloat(curr)
@@ -105,9 +102,6 @@ export default function Home() {
                 });
         }
     }, [coordinate]);
-    useEffect(() => {
-        console.log(answerCoords);
-    }, [answerCoords]);
     return (
         <div className="w-screen h-screen">
             <div className="text-white title text-[6vw] w-[60vw] absolute z-[100000]">
@@ -126,6 +120,24 @@ export default function Home() {
                 answerCoords={answerCoords}
                 setCoordinate={setCoordinate}
             />
+            <div className="absolute bottom-[5vh] min-width-[50vw] left-0 right-0 ms-auto me-auto w-fit bg-black fade-in p-[2vw]">
+                <div className="text-[1.5vw] font-bold ">
+                    Turn this slider to change the time!
+                </div>
+                <Slider
+                    sx={{
+                        width: window.innerWidth * 0.5,
+                    }}
+                    value={howManyDays}
+                    onChange={(e, newValue) => {
+                        setDays(newValue);
+                    }}
+                    min={1}
+                    max={30}
+                    valueLabelDisplay="auto"
+                    step={1}
+                />
+            </div>
         </div>
     );
 }
