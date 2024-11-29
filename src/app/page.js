@@ -102,42 +102,44 @@ export default function Home() {
                 });
         }
     }, [coordinate]);
-    return (
-        <div className="w-screen h-screen">
-            <div className="text-white title text-[6vw] w-[60vw] absolute z-[100000]">
-                Plastic Tracker
-            </div>
-            <div className="w-[40vw] h-[40vh] bg-black p-[1vw] z-[1000] fixed">
-                <div className="text-white top-[8vw] absolute fade-in text-[1.5vw] w-[35vw]">
-                    This is a free tool to see where your plastic goes! Click on
-                    the map to see where a piece of plastic will end up after 1
-                    month.
+    if (typeof window !== "undefined") {
+        return (
+            <div className="w-screen h-screen">
+                <div className="text-white title text-[6vw] w-[60vw] absolute z-[100000]">
+                    Plastic Tracker
                 </div>
-            </div>
+                <div className="w-[40vw] h-[40vh] bg-black p-[1vw] z-[1000] fixed">
+                    <div className="text-white top-[8vw] absolute fade-in text-[1.5vw] w-[35vw]">
+                        This is a free tool to see where your plastic goes!
+                        Click on the map to see where a piece of plastic will
+                        end up after 1 month.
+                    </div>
+                </div>
 
-            <MapWithNoSSR
-                coordinate={coordinate}
-                answerCoords={answerCoords}
-                setCoordinate={setCoordinate}
-            />
-            <div className="absolute bottom-[5vh] min-width-[50vw] left-0 right-0 ms-auto me-auto w-fit bg-black fade-in p-[2vw]">
-                <div className="text-[1.5vw] font-bold ">
-                    Turn this slider to change the time!
-                </div>
-                <Slider
-                    sx={{
-                        width: window.innerWidth * 0.5,
-                    }}
-                    value={howManyDays}
-                    onChange={(e, newValue) => {
-                        setDays(newValue);
-                    }}
-                    min={1}
-                    max={30}
-                    valueLabelDisplay="auto"
-                    step={1}
+                <MapWithNoSSR
+                    coordinate={coordinate}
+                    answerCoords={answerCoords}
+                    setCoordinate={setCoordinate}
                 />
+                <div className="absolute bottom-[5vh] min-width-[50vw] left-0 right-0 ms-auto me-auto w-fit bg-black fade-in p-[2vw]">
+                    <div className="text-[1.5vw] font-bold ">
+                        Turn this slider to change the time!
+                    </div>
+                    <Slider
+                        sx={{
+                            width: window.innerWidth * 0.5,
+                        }}
+                        value={howManyDays}
+                        onChange={(e, newValue) => {
+                            setDays(newValue);
+                        }}
+                        min={1}
+                        max={30}
+                        valueLabelDisplay="auto"
+                        step={1}
+                    />
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
