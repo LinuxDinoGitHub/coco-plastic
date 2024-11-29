@@ -123,9 +123,9 @@ export default function Home() {
                 </div>
                 <div className="w-[40vw] h-[40vh] bg-black p-[1vw] z-[1000] fixed">
                     <div className="text-white top-[8vw] absolute fade-in text-[1.5vw] w-[35vw]">
-                        This is a free tool to see where your plastic goes!
-                        Click on the map to see where a piece of plastic will
-                        end up after 1 month.
+                    This is a free tool to see where your plastic goes! 
+                    Click on the map to see where a piece of plastic will end up. 
+                    You can adjust the amount of time with the slider below.
                     </div>
                 </div>
 
