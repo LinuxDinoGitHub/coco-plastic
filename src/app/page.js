@@ -57,7 +57,7 @@ function tomorrow(time) {
 
 export default function Home() {
     const [coordinate, setCoordinate] = useState([null, null]);
-    const [answerCoords, setAnswerCoords] = useState([null, null]);
+    const [answerCoords, setAnswerCoords] = useState([[null, null]]);
     const [time, setTime] = useState("2024-11-01");
     const [howManyDays, setDays] = useState(10);
 
@@ -87,14 +87,17 @@ export default function Home() {
                             const isWater = res.data.water;
                             if (isWater && isHK) {
                                 // determine the coords, and do setAnswerCoords([latitude, longitude])
-                                for (let i = 0; i < howManyDays; i++) {
-                                    setAnswerCoords(
-                                        nextCoordinate(coordinate, time).map(
-                                            (curr) => parseFloat(curr)
-                                        )
+                                const finalArr = [coordinate];
+                                for (let i = 0; i < 30; i++) {
+                                    finalArr.push(
+                                        nextCoordinate(
+                                            finalArr[finalArr.length - 1],
+                                            time
+                                        ).map((curr) => parseFloat(curr))
                                     );
                                     setTime(tomorrow(time));
                                 }
+                                setAnswerCoords(finalArr);
                             } else {
                                 alert("Not on water or not in HK!!!");
                             }
@@ -118,7 +121,11 @@ export default function Home() {
 
                 <MapWithNoSSR
                     coordinate={coordinate}
-                    answerCoords={answerCoords}
+                    answerCoords={
+                        answerCoords[0][0]
+                            ? answerCoords[howManyDays]
+                            : [null, null]
+                    }
                     setCoordinate={setCoordinate}
                 />
                 <div className="absolute bottom-[5vh] min-width-[50vw] left-0 right-0 ms-auto me-auto w-fit bg-black fade-in p-[2vw]">
