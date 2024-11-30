@@ -76,7 +76,7 @@ export default function Home() {
                     {
                         headers: {
                             "x-rapidapi-key":
-                                "eddf273b63msh1f197c8d607949cp11a86fjsn682de1c33dc2",
+                                "f5108b8fedmsh76603998cf4a4cap15d834jsn5f0cf616e731",
                             "x-rapidapi-host": "isitwater-com.p.rapidapi.com",
                         },
                     }
