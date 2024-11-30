@@ -11,6 +11,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L from "leaflet";
+import { Polyline } from "react-leaflet";
 
 const iconStart = L.icon({
     iconUrl: "/marker-icon.webp",
@@ -38,8 +39,8 @@ const RecenterAutomatically = ({ lat, lng }) => {
     }, [lat, lng]);
     return null;
 };
-
-const Map = ({ coordinate, setCoordinate, answerCoords }) => {
+const red = {color: 'red'}
+const Map = ({ coordinate, setCoordinate, answerCoords, answerCoordsAll }) => {
     return (
         <MapContainer
             center={[22.370056, 114.1535941]}
@@ -47,6 +48,7 @@ const Map = ({ coordinate, setCoordinate, answerCoords }) => {
             className="w-screen h-screen fade-in"
             zoomControl={false}
         >
+            <Polyline pathOptions={red} positions={typeof answerCoordsAll[0][0] === "number" ? answerCoordsAll : []} />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

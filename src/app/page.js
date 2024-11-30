@@ -136,11 +136,8 @@ export default function Home() {
                             : [null, null]
                     }
                     setCoordinate={setCoordinate}
+                    answerCoordsAll={answerCoords}
                 >
-                    <Polyline
-                        pathOptions={{ color: "lime" }}
-                        positions={answerCoords}
-                    />
                 </MapWithNoSSR>
                 <div className="absolute bottom-[5vh] min-width-[50vw] left-0 right-0 ms-auto me-auto w-fit bg-black fade-in p-[2vw]">
                     <div className="text-[1.5vw] font-bold ">
