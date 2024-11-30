@@ -41,6 +41,7 @@ const RecenterAutomatically = ({ lat, lng }) => {
 };
 const red = {color: 'red'}
 const Map = ({ coordinate, setCoordinate, answerCoords, answerCoordsAll }) => {
+    console.log(answerCoordsAll[0])
     return (
         <MapContainer
             center={[22.370056, 114.1535941]}
@@ -48,7 +49,6 @@ const Map = ({ coordinate, setCoordinate, answerCoords, answerCoordsAll }) => {
             className="w-screen h-screen fade-in"
             zoomControl={false}
         >
-            <Polyline pathOptions={red} positions={typeof answerCoordsAll[0][0] === "number" ? answerCoordsAll : []} />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -65,20 +65,24 @@ const Map = ({ coordinate, setCoordinate, answerCoords, answerCoordsAll }) => {
                     <Popup>Plastic ends here</Popup>
                 </Marker>
             )}
-            <RecenterAutomatically
-                lat={
-                    typeof answerCoords[0] === "number"
-                        ? answerCoords[0]
-                        : 22.370056
-                }
-                lng={
-                    typeof answerCoords[1] === "number"
-                        ? answerCoords[1]
-                        : 114.1535941
-                }
-            />
+            
+            <Polyline pathOptions={red} positions={typeof answerCoordsAll[0][0] === "number" ? answerCoordsAll : []} />
         </MapContainer>
     );
 };
 
 export default Map;
+
+
+/*<RecenterAutomatically
+lat={
+    typeof answerCoords[0] === "number"
+        ? answerCoords[0]
+        : 22.370056
+}
+lng={
+    typeof answerCoords[1] === "number"
+        ? answerCoords[1]
+        : 114.1535941
+}
+/>*/ //Rencenter code [DELETED] due to path shifting bug
