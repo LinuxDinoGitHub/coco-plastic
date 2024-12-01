@@ -1,36 +1,20 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Try now: [https://coco-plastic.vercel.app/]([url](https://coco-plastic.vercel.app/))
+If there are any issues, please help me out by sending a PR to this repo to notify me of the issue, and that would help the website out very much, thank you.
 
-## Getting Started
+## Plastic Tracker CoCo 2024 Hackathon
 
-First, run the development server:
+Did you know that there are 5.25 trillion tons of plastic in the ocean?
+That's a lot isn't it?
+Every year, 100 million marine animals die from plastic waste, and how the plastic ended up there is unpredictable to us.
+That's why for this year's ESF Computer Conference, we decided to create a Plastic Waste tracker, specifically for waste disposed out of Hong Kong.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![image](https://github.com/user-attachments/assets/fb25673e-fff6-46a0-985f-507c6e5b2620)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This is a plastic tracker simulation which allows you to simulate where trash ends up.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+The way the algorithm calculates the predicted path is through data provided by the [Hong Kong government]([url](https://current.hydro.gov.hk/main/prediction_static.php)) and doing trigonometric calculations based on the bearing and current.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The plastic tracker website also includes a slider, allowing you to see where the plastic ends up after a certain amount of days.
 
-## Learn More
+Only bounded and exclusive within Hong Kong due to lack of global current data.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
